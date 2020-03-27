@@ -1,11 +1,12 @@
-""" Code from Vitalik Buterin: https://github.com/ethereum/research/tree/master/zksnark
+""" Adaptation from work by Vitalik Buterin: 
+https://github.com/ethereum/research/tree/master/zksnark
 
-MIT license: https://github.com/ethereum/research/blob/master/LICENSE
+MIT license: 
+https://github.com/ethereum/research/blob/master/LICENSE
 
-Adapted: 
+Adaptations: 
 * Updated code from Python 2 to Python 3.
 
-Master version in repo: https://github.com/toonsegers/pynocchio
 """
 
 import ast
