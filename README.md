@@ -13,7 +13,9 @@ Repository contains helpers for:
 ## Credits
 
 This is derived work. For copyright and license information of the original
-works see LICENSE file. Links to original repositories:
+works see LICENSE file. 
+
+Links to original repositories:
 
 * bn256 by Jack Lloyd: https://github.com/randombit/pairings.py/ (BSD-2-Clause license)
 * r1cs and qap tools by Vitalik Buterin: https://github.com/ethereum/research/tree/master/zksnark (MIT license)
