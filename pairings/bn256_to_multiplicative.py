@@ -11,8 +11,7 @@ project_root = sys.path.append(os.path.abspath('..'))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from ac20_circuit_sat.bn256 import *
-
+from zk_helpers.pairings.bn256 import *
 
 
 class CurvePointMult(CurvePoint):
