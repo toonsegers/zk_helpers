@@ -6,6 +6,7 @@ https://github.com/ethereum/research/blob/master/LICENSE
 
 Adaptations: 
 * Updated code from Python 2 to Python 3.
+* flatten_stmt() method updated to handle multiple assignments
 
 """
 
@@ -82,14 +83,33 @@ def mksymbol():
 
 
 def flatten_stmt(stmt):
-    # Get target variable
+    """ Get target variable(s) 
+    TS: Updated to handle case of multiple variable assignments 
+    on one line of Python code.
+
+    """
+
     if isinstance(stmt, ast.Assign):
-        assert len(stmt.targets) == 1 and isinstance(stmt.targets[0], ast.Name)
-        target = stmt.targets[0].id
+        if len(stmt.targets) == 1 and isinstance(stmt.targets[0], ast.Name):
+            targets = [(stmt.targets[0].id, stmt.value)]
+        elif isinstance(stmt.targets[0], ast.Tuple):
+            targets = [(t.id, stmt.value.elts[i]) for i, t in enumerate(stmt.targets[0].elts)]
+        else:
+            raise NotImplementedError
+
     elif isinstance(stmt, ast.Return):
-        target = '~out'
+        if isinstance(stmt.value, (ast.Name, ast.BinOp)):
+            targets = [('~out', stmt.value)]
+        elif isinstance(stmt.value, ast.Tuple):
+            targets = [(f'~out_{i}', stmt.value.elts[i]) for i, t in enumerate(stmt.value.elts)]
+        else:
+            raise NotImplementedError
+
     # Get inner content
-    return flatten_expr(target, stmt.value)
+    flattened = []
+    for t in targets:
+        flattened.extend(flatten_expr(*t))
+    return flattened
 
 # Main method for flattening an expression
 
