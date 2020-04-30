@@ -10,8 +10,17 @@ import sys, os
 project_root = sys.path.append(os.path.abspath('..')) 
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
+import logging
 
 from zk_helpers.pairings.bn256 import *
+
+
+logger_bn_mul = logging.getLogger("bn256_mul")
+logger_bn_mul.setLevel(logging.INFO)
+
+pow_counter_regular = 0
+pow_counter_twist = 0
+
 
 
 class CurvePointMult(CurvePoint):
@@ -22,6 +31,9 @@ class CurvePointMult(CurvePoint):
         return self.add(other)
 
     def __pow__(self, scalar): 
+        global pow_counter_regular
+        pow_counter_regular += 1
+        logger_bn_mul.debug(f"pow_counter_regular={pow_counter_regular}")
         # return self.scalar_mul(scalar)
         return self.scalar_mul(int(scalar))
 
@@ -41,6 +53,9 @@ class CurveTwistMult(CurveTwist):
         return self.add(other)
 
     def __pow__(self, scalar): 
+        global pow_counter_twist
+        pow_counter_twist += 1
+        logger_bn_mul.debug(f"pow_counter_twist={pow_counter_twist}")        
         # return self.scalar_mul(scalar)
         return self.scalar_mul(int(scalar))
 

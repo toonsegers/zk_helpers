@@ -13,7 +13,7 @@ Adaptations:
 * Added but commented out simpler __repr__ to Point and GFp1 classes
 * Replaced `assert type(value) == CurveTwist` by `assert isinstance(value, CurveTwist)` 
   in several places to allow the bn256_to_multiplicative wrapper to inherit from bn256
-
+* Added logger for counting exponentiations
 
 --------------------------------------------------------------------------------
 Copyright and license information of the original works.
@@ -47,8 +47,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import hashlib
+import logging
 import sys
 import os
+
+
+logging.basicConfig(level=logging.DEBUG)
+logger_bn = logging.getLogger("bn256")
+logger_bn.setLevel(logging.INFO)
+
+pow_counter_regular = 0
+pow_counter_twist = 0
+
 
 v = 1868033
 #v = 0b111001000000100000001
@@ -390,6 +400,9 @@ class CurvePoint(object):
     #     return self + -Q
 
     def __mul__(self, scalar): 
+        global pow_counter_regular
+        pow_counter_regular += 1
+        logger_bn.debug(f"pow_counter_regular={pow_counter_regular}")  
         # return self.scalar_mul(scalar)
         return self.scalar_mul(int(scalar))
 
@@ -585,6 +598,10 @@ class CurveTwist(object):
     #     return self + -Q
 
     def __mul__(self, scalar): 
+        global pow_counter_twist
+        pow_counter_twist += 1
+        logger_bn.debug(f"pow_counter_twist={pow_counter_twist}")  
+
         # return self.scalar_mul(scalar)
         return self.scalar_mul(int(scalar))
 
