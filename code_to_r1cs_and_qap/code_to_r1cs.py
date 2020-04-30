@@ -197,7 +197,11 @@ def insert_var(arr, varz, var, used, reverse=False):
 
 
 def get_var_placement(inputs, flatcode):
-    return ['~one'] + [x for x in inputs] + ['~out'] + [c[1] for c in flatcode if c[1] not in inputs and c[1] != '~out']
+    # return ['~one'] + [x for x in inputs] + ['~out'] + [c[1] for c in flatcode if c[1] not in inputs and c[1] != '~out']
+    inputs = [x for x in inputs]
+    outputs = [c[1] for c in flatcode if c[1] not in inputs and c[1].startswith('~out')]
+    interims = [c[1] for c in flatcode if c[1] not in inputs and not c[1].startswith('~out')]
+    return ['~one'] + inputs + outputs + interims
 
 
 # Convert the flattened code generated above into a rank-1 constraint system
