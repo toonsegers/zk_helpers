@@ -10,7 +10,7 @@ Adaptations:
 * Added __add__, __mul__ to Point classes
 * Added __int__ to GFp1 class
 * Added but commented out __neg__ and __sub__ to Point and GFp1,2 classes
-* Added but commented out simpler __repr__ to Point and GFp1 classes
+* Added simpler __repr__ to Point and GFp1 classes
 * Replaced `assert type(value) == CurveTwist` by `assert isinstance(value, CurveTwist)` 
   in several places to allow the bn256_to_multiplicative wrapper to inherit from bn256
 * Added logger for counting exponentiations
@@ -206,7 +206,7 @@ class GFp_1(object):
 
     def square(self):
         return self * self
-        return GFp_1(self.v * self.v)
+        # return GFp_1(self.v * self.v) # TS: commented out, redundant
 
     def double(self):
         return self + self
@@ -410,9 +410,9 @@ class CurvePoint(object):
         return self * scalar
 
     def __repr__(self):
-        self.force_affine() 
-        return "(%d, %d)" % (self.x.value(), self.y.value())
-        # return f"({self.x}, {self.y}, {self.y})"  
+        # self.force_affine() 
+        # return "(%d, %d)" % (self.x.value(), self.y.value())
+        return f"({self.x}, {self.y}, {self.z})"  
 
     def is_on_curve(self):
         return point_on_curve(self, curve_B)
@@ -609,9 +609,9 @@ class CurveTwist(object):
         return self * scalar
 
     def __repr__(self):
-        self.force_affine()
-        return "(%s, %s)" % (self.x, self.y)
-        # return f"({self.x}, {self.y}, {self.z})"  
+        # self.force_affine()
+        # return "(%s, %s)" % (self.x, self.y)
+        return f"({self.x}, {self.y}, {self.z})"  
 
     def is_on_curve(self):
         return point_on_curve(self, twist_B)
